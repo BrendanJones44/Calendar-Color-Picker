@@ -85,7 +85,16 @@ def calendar_items():
   # Save credentials back to session in case access token was refreshed.
   session['credentials'] = credentials_to_dict(credentials)
 
-  return jsonify(cal_items)
+  grouped_cal_items = {}
+  for cal_item in cal_items:
+    if 'location' in cal_item.keys():
+      event_location = cal_item['location']
+      if event_location in grouped_cal_items.keys():
+        grouped_cal_items[event_location].append(cal_item)
+      else:
+        grouped_cal_items[event_location] = [cal_item]
+
+  return jsonify(grouped_cal_items)
 
 def credentials_to_dict(credentials):
   return {'token': credentials.token,
