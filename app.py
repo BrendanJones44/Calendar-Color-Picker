@@ -1,3 +1,4 @@
+from dateutil import parser
 from flask import Flask, session, redirect, url_for, request, jsonify
 import os
 import google.oauth2.credentials
@@ -89,12 +90,24 @@ def calendar_items():
   for cal_item in cal_items:
     if 'location' in cal_item.keys():
       event_location = cal_item['location']
-      if event_location in grouped_cal_items.keys():
-        grouped_cal_items[event_location].append(cal_item)
-      else:
-        grouped_cal_items[event_location] = [cal_item]
+      event_name = cal_item['summary']
+      event_key = event_name + ' ' + event_location
+      # start_date = parser.parse(cal_item['start']['dateTime'])
+      # print(start_date.weekday())
+      # print(start_date.hour)
 
-  return jsonify(grouped_cal_items)
+      # end_date = parser.parse(cal_item['end']['dateTime'])
+
+      if event_key in grouped_cal_items.keys():
+        grouped_cal_items[event_key].append(cal_item)
+      else:
+        grouped_cal_items[event_key] = [cal_item]
+
+  # Strip any events that don't recure often
+  recurrence_threshold = 10
+  grouped_events = dict((key,value) for key, value in grouped_cal_items.items() if len(value) >= recurrence_threshold)
+
+  return jsonify(grouped_events)
 
 def credentials_to_dict(credentials):
   return {'token': credentials.token,
