@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+  <body>
+    <form action="{{ url_for('color_selection') }}" method="post">
+      <table border=1>
+        {% for key, value in grouped_events.items() %}
+
+        <tr>
+          <th> {{ key }} </th>
+          <td>
+            <input type="int" name="{{ key }}_color">
+            <input hidden=true type="text" name="{{ key }}" value="{{ value }}">
+            <br>
+          </td>
+        </tr>
+
+        {% endfor %}
+      </table>
+    <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>

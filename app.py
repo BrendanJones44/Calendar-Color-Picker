@@ -1,5 +1,6 @@
 from dateutil import parser
-from flask import Flask, session, redirect, url_for, request, jsonify
+from flask import Flask, session, redirect, url_for, request, jsonify, render_template
+from ast import literal_eval
 import os
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
@@ -107,7 +108,28 @@ def calendar_items():
   recurrence_threshold = 10
   grouped_events = dict((key,value) for key, value in grouped_cal_items.items() if len(value) >= recurrence_threshold)
 
-  return jsonify(grouped_events)
+  return render_template("grouped_events.html",grouped_events = grouped_events)
+
+@app.route('/color_selection', methods = ['POST'])
+def color_selection():
+  # Load credentials from the session.
+  credentials = google.oauth2.credentials.Credentials(
+      **session['credentials'])
+
+  cal_svc = googleapiclient.discovery.build(
+      API_SERVICE_NAME, API_VERSION, credentials=credentials)
+
+  for key, value in request.form.items():
+    if "_color" in key:
+      event_name = key[:-6]
+      events_to_update = literal_eval(request.form[event_name])
+      for event in events_to_update:
+        if value:
+          event["colorId"] = value
+          updated_event = cal_svc.events().update(calendarId='primary', eventId=event['id'], body=event).execute()
+  return "form submitted"
+
+  
 
 def credentials_to_dict(credentials):
   return {'token': credentials.token,
