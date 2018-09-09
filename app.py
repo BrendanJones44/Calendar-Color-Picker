@@ -14,6 +14,20 @@ SCOPES = ['https://www.googleapis.com/auth/calendar']
 API_SERVICE_NAME = 'calendar'
 API_VERSION = 'v3'
 
+GOOGLE_CAL_BACKGROUND_COLORS = {
+  "1": "#A4BDFC",
+  "2": "#7AE7BF",
+  "3": "#DBADFF",
+  "4": "#FF887C",
+  "5": "#FBD878",
+  "6": "#FFB878",
+  "7": "#46D6DB",
+  "8": "#E1E1E1",
+  "9": "#5484ED",
+  "10": "#51B749",
+  "11": "#DC2127",
+}
+
 @app.route("/")
 def hello():
     return 'Welcome to Cal Colors! <a href="/calendar"> Class List </a>'
@@ -96,9 +110,7 @@ def calendar_items():
       # start_date = parser.parse(cal_item['start']['dateTime'])
       # print(start_date.weekday())
       # print(start_date.hour)
-
       # end_date = parser.parse(cal_item['end']['dateTime'])
-
       if event_key in grouped_cal_items.keys():
         grouped_cal_items[event_key].append(cal_item)
       else:
@@ -108,7 +120,7 @@ def calendar_items():
   recurrence_threshold = 10
   grouped_events = dict((key,value) for key, value in grouped_cal_items.items() if len(value) >= recurrence_threshold)
 
-  return render_template("grouped_events.html",grouped_events = grouped_events)
+  return render_template("grouped_events.html", grouped_events = grouped_events, color_map = GOOGLE_CAL_BACKGROUND_COLORS)
 
 @app.route('/color_selection', methods = ['POST'])
 def color_selection():
