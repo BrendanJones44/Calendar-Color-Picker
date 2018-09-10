@@ -120,7 +120,7 @@ def calendar_items():
   recurrence_threshold = 10
   grouped_events = dict((key,value) for key, value in grouped_cal_items.items() if len(value) >= recurrence_threshold)
 
-  return render_template("grouped_events.html", grouped_events = grouped_events, color_map = GOOGLE_CAL_BACKGROUND_COLORS)
+  return render_template("grouped_events.html", grouped_events = grouped_events, color_map = GOOGLE_CAL_BACKGROUND_COLORS, enumerate=enumerate)
 
 @app.route('/color_selection', methods = ['POST'])
 def color_selection():

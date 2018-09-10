@@ -5,6 +5,7 @@
         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
+  <link rel="stylesheet" href="{{ url_for('static', filename='color_picker.css') }}">
   <script src="{{ url_for('static', filename='color_picker.js') }}"></script>
 
   <body>
@@ -21,8 +22,8 @@
 
           {% for key, value in grouped_events.items() %}
           <tr>
-            <th> {{ key }} </th>
-            <td>
+            <th id="tr-{{ key }}" style="background-color:#efefef"> {{ key }} </th>
+            <td id="td-{{ key }}" style="background-color:#efefef;">
               <div class="col-2">
                 <button class="color-input btn btn-primary" style="background-color:{{ color_map[grouped_events[key][0]['colorId']] }};" value="Color">
               </div>
@@ -31,11 +32,28 @@
           {% endfor %}
 
         </table>
+        <div class="col-1 color-picker">
+          <table class="color-selection-table">
+          {% for i, val in enumerate(color_map.values()) %}
+            {% if i % 3 == 0 %}
+              <tr>
+            {% endif %}
+                <td>
+                  <div class="btn btn-secondary btn-block color-option" style="background-color:{{val}};">
+                    
+                  </div>
+                </td>
+            {% if i % 3 == 2 %}
+              </tr>
+            {% endif %}
+          {% endfor %}
+          </table>
+        </div>
       </div>
-
+      
       <div class="row justify-content-center">
         <div class="col-6">
-          <input class="btn btn-secondary btn-block" type="submit" value="Submit">
+          <input class="submit-button btn btn-secondary btn-block" type="submit" value="Submit">
         </div>
       </div>
 
