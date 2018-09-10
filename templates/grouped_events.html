@@ -21,8 +21,8 @@
         <table border=1>
           {% for i, (key, value) in enumerate(grouped_events.items()) %}
           <tr>
-            <th id="tr-{{ key }}" style="background-color:#efefef"> {{ key }} </th>
-            <td id="td-{{ key }}" style="background-color:#efefef;">
+            <th id="tr-{{i}}"> {{ key }} </th>
+            <td id="td-{{i}}">
               <div class="col-2">
                 <button id="color-btn-{{i}}" class="color-input btn btn-primary" style="background-color:{{ color_map[grouped_events[key][0]['colorId']] }};" value="Color">
               </div>
@@ -47,12 +47,6 @@
             {% endif %}
           {% endfor %}
           </table>
-        </div>
-      </div>
-      
-      <div class="row justify-content-center">
-        <div class="col-6">
-          <input class="submit-button btn btn-secondary btn-block" type="submit" value="Submit">
         </div>
       </div>
 
