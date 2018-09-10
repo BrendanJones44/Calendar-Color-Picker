@@ -1,5 +1,11 @@
+colorPickerShowing = false;
 function handleColorInputClick() {
-  alert("clicked!");
+  if (colorPickerShowing) {
+    document.getElementById("color-picker").style.visibility = "hidden";
+  } else {
+    document.getElementById("color-picker").style.visibility = "visible";
+  }
+  colorPickerShowing = !colorPickerShowing;
 }
 function addEventListners() {
   colorInputButtons = document.getElementsByClassName("color-input");
