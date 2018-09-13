@@ -60,7 +60,7 @@ function handleColorSelectionClick() {
   xhr.open("POST", updateColorUrl, true);
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.send(JSON.stringify({
-    "newColor": colorId,
+    "newColorId": colorId,
     "events": eventsToUpdate
   }));
 }
