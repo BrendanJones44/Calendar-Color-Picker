@@ -131,14 +131,15 @@ def color_selection():
   cal_svc = googleapiclient.discovery.build(
       API_SERVICE_NAME, API_VERSION, credentials=credentials)
 
-  for key, value in request.form.items():
-    if "_color" in key:
-      event_name = key[:-6]
-      events_to_update = literal_eval(request.form[event_name])
-      for event in events_to_update:
-        if value:
-          event["colorId"] = value
-          updated_event = cal_svc.events().update(calendarId='primary', eventId=event['id'], body=event).execute()
+  print(request.data)
+  # for key, value in request.form.items():
+  #   if "_color" in key:
+  #     event_name = key[:-6]
+  #     events_to_update = literal_eval(request.form[event_name])
+  #     for event in events_to_update:
+  #       if value:
+  #         event["colorId"] = value
+  #         updated_event = cal_svc.events().update(calendarId='primary', eventId=event['id'], body=event).execute()
   return "form submitted"
 
   

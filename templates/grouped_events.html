@@ -6,8 +6,10 @@
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
   <link rel="stylesheet" href="{{ url_for('static', filename='color_picker.css') }}">
+  <script>
+    var groupedEvents = {{ grouped_events| tojson }};
+  </script>
   <script src="{{ url_for('static', filename='color_picker.js') }}"></script>
-
   <body>
     <div class="container">
 
@@ -26,8 +28,8 @@
               <div class="col-2">
                 <button id="color-btn-{{i}}"
                         class="color-input btn btn-primary" 
-                        style="background-color:{{ color_map[grouped_events[key][0]['colorId']] }};" 
-                        value="Color">
+                        style="background-color:{{ color_map[grouped_events[key][0]['colorId']] }};"
+                        value="{{key}}">
               </div>
             </td>
           </tr>
@@ -36,12 +38,13 @@
         </table>
         <div class="col-1" id="color-picker">
           <table class="color-selection-table">
-          {% for i, val in enumerate(color_map.values()) %}
+          {% for i, (key, val) in enumerate(color_map.items()) %}
             {% if i % 3 == 0 %}
               <tr>
             {% endif %}
                 <td>
-                  <div class="btn btn-secondary btn-block color-option" 
+                  <div class="btn btn-secondary btn-block color-option"
+                       id="{{key}}" 
                        style="background-color:{{val}};">
                     <!-- Color Box, no text-->
                   </div>
