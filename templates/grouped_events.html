@@ -24,7 +24,10 @@
             <th id="tr-{{i}}"> {{ key }} </th>
             <td id="td-{{i}}">
               <div class="col-2">
-                <button id="color-btn-{{i}}" class="color-input btn btn-primary" style="background-color:{{ color_map[grouped_events[key][0]['colorId']] }};" value="Color">
+                <button id="color-btn-{{i}}"
+                        class="color-input btn btn-primary" 
+                        style="background-color:{{ color_map[grouped_events[key][0]['colorId']] }};" 
+                        value="Color">
               </div>
             </td>
           </tr>
@@ -38,8 +41,9 @@
               <tr>
             {% endif %}
                 <td>
-                  <div class="btn btn-secondary btn-block color-option" style="background-color:{{val}};">
-                    
+                  <div class="btn btn-secondary btn-block color-option" 
+                       style="background-color:{{val}};">
+                    <!-- Color Box, no text-->
                   </div>
                 </td>
             {% if i % 3 == 2 %}
