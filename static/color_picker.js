@@ -57,6 +57,11 @@ function handleColorSelectionClick() {
 
   updateColorUrl = "http://localhost:5000/color_selection";
   var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState == XMLHttpRequest.DONE) {
+      alert("Completed");
+    }
+  }
   xhr.open("POST", updateColorUrl, true);
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.send(JSON.stringify({

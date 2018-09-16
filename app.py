@@ -107,10 +107,6 @@ def calendar_items():
       event_location = cal_item['location']
       event_name = cal_item['summary']
       event_key = event_name + ' ' + event_location
-      # start_date = parser.parse(cal_item['start']['dateTime'])
-      # print(start_date.weekday())
-      # print(start_date.hour)
-      # end_date = parser.parse(cal_item['end']['dateTime'])
       if event_key in grouped_cal_items.keys():
         grouped_cal_items[event_key].append(cal_item)
       else:
@@ -118,13 +114,14 @@ def calendar_items():
 
   # Strip any events that don't recure often
   recurrence_threshold = 10
-  grouped_events = dict((key,value) for key, value in grouped_cal_items.items() if len(value) >= recurrence_threshold)
+  grouped_events = dict(
+    (key,value) for key, value in grouped_cal_items.items() if len(value) >= recurrence_threshold
+  )
 
   return render_template("grouped_events.html", grouped_events = grouped_events, color_map = GOOGLE_CAL_BACKGROUND_COLORS, enumerate=enumerate)
 
 @app.route('/color_selection', methods = ['POST'])
 def color_selection():
-  # Load credentials from the session.
   credentials = google.oauth2.credentials.Credentials(
       **session['credentials'])
 
@@ -135,7 +132,11 @@ def color_selection():
 
   for event in request.json["events"]:
       event["colorId"] = newColorId
-      updated_event = cal_svc.events().update(calendarId='primary', eventId=event['id'], body=event).execute()
+      updated_event = cal_svc.events().update(
+        calendarId='primary', 
+        eventId=event['id'], 
+        body=event
+      ).execute()
   return "form submitted"
 
   
