@@ -59,7 +59,8 @@ function handleColorSelectionClick() {
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function () {
     if (xhr.readyState == XMLHttpRequest.DONE) {
-      alert("Completed");
+      closeModal();
+      console.log("close");
     }
   }
   xhr.open("POST", updateColorUrl, true);
@@ -68,6 +69,15 @@ function handleColorSelectionClick() {
     "newColorId": colorId,
     "events": eventsToUpdate
   }));
+  openModal();
+}
+function openModal() {
+  // modal = document.getElementById("loadingModal");
+  // modal.modal();
+  $("#loadingModal").modal();
+}
+function closeModal() {
+  $('#loadingModal').modal('toggle');
 }
 
 function addEventListners() {
