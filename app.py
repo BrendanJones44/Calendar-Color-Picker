@@ -7,7 +7,7 @@ import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import google.auth.transport.requests
 app = Flask(__name__)
-app.secret_key = "b'\xae\\[\x87\xae\x91\xc5\xcfK\x87\xdd\xf9(\x80\x1a3\xc8\xa1\xd4\x82\xbe\xbb\x17\x14'"
+app.secret_key = os.environ['APP_KEY']
 
 CLIENT_SECRETS_FILE = "client_secret.json"
 SCOPES = ['https://www.googleapis.com/auth/calendar']
@@ -27,10 +27,6 @@ GOOGLE_CAL_BACKGROUND_COLORS = {
   "10": "#51B749",
   "11": "#DC2127",
 }
-
-@app.route("/")
-def hello():
-    return 'Welcome to Cal Colors! <a href="/calendar"> Class List </a>'
 
 @app.route('/authorize')
 def authorize():
@@ -68,7 +64,7 @@ def oauth2callback():
 
   return redirect(url_for('calendar_items'))
 
-@app.route('/calendar')
+@app.route('/')
 def calendar_items():
   if 'credentials' not in session:
     return redirect('authorize')
