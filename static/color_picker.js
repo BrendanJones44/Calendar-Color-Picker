@@ -1,6 +1,7 @@
 NUM_PX_BETWEEN_ROW = 27;
 STARTING_COLOR_PICKER_MARGIN_TOP = -25;
 UPDATE_COLOR_ENDPOINT = "http://localhost:5000/color_selection";
+
 colorPickerShowing = false;
 eventsToUpdate = null;
 selectedRowId = null;
@@ -10,7 +11,7 @@ function buttonId(buttonString) {
 }
 
 function setTableDark(num){
-  for(i=0; i < 5; i++){
+  for(i=0; i < NUM_EVENTS; i++){
     if (i !== Number(num)){
       document.getElementById("tr-" + i).style.background = "#7b7d79";
       document.getElementById("td-" + i).style.background = "#7b7d79";
@@ -19,7 +20,7 @@ function setTableDark(num){
 }
 
 function setTableLight(){
-  for (i = 0; i < 5; i++) {
+  for (i = 0; i < NUM_EVENTS; i++) {
     document.getElementById("tr-" + i).style.background = "#eeeeee";
     document.getElementById("td-" + i).style.background = "#eeeeee";
   }
