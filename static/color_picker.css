@@ -38,6 +38,24 @@
   margin-top: 20px;
 }
 
+#arrow-right {
+	transform: rotate(-45deg);
+	-webkit-transform: rotate(-45deg);
+}
+
+#modal-color-change {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 20px;
+}
+
+#modal-old-color, #modal-new-color {
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+
 .loader {
     border: 16px solid #f3f3f3; /* Light grey */
     border-top: 16px solid #3498db; /* Blue */

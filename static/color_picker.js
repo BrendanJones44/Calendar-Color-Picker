@@ -6,7 +6,9 @@ pageState = {
   "colorPickerShowing": false,
   "eventsToUpdate": null,
   "selectedRowId": null,
-  "eventName": null
+  "eventName": null,
+  "newColor": null,
+  "oldColor": null
 };
 
 function buttonId(buttonString) {
@@ -16,8 +18,15 @@ function buttonId(buttonString) {
 function setModalText() {
   var modalText = document.getElementById("updateEventText");
   var numEvents = pageState.eventsToUpdate.length
-  modalText.textContent = "Updating " + numEvents + " occurences of " +
-                           pageState.eventName + "... (This may take awhile)";
+  modalText.textContent = "Updating " + numEvents + " occurences of " + pageState.eventName;
+}
+
+function setModalColors() {
+  var oldColor = document.getElementById("modal-old-color");
+  oldColor.style.background = pageState.oldColor;
+
+  var newColor = document.getElementById("modal-new-color");
+  newColor.style.background = pageState.newColor;
 }
 
 function setTableDark(){
@@ -77,6 +86,7 @@ function handleColorInputClick() {
   pageState.selectedRowId = buttonId(this.id);
   pageState.eventsToUpdate = groupedEvents[this.value];
   pageState.eventName = this.value.substr(0, this.value.indexOf(','));
+  pageState.oldColor = this.style.backgroundColor;
   if (pageState.colorPickerShowing) {
     hideColorPicker();
   } else {
@@ -93,6 +103,7 @@ function handleResponse(colorId) {
 
 function handleColorSelectionClick() {
   var colorId = this.id;
+  pageState.newColor = colorMap[colorId]
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function () {
     if (xhr.readyState == XMLHttpRequest.DONE) {
@@ -105,6 +116,7 @@ function handleColorSelectionClick() {
     "newColorId": colorId,
     "events": pageState.eventsToUpdate
   }));
+  setModalColors();
   setModalText();
   openModal();
 }
