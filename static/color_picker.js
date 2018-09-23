@@ -24,6 +24,14 @@ function setTableLight(){
   }
 }
 
+function hideColorPicker() {
+  colorPicker = document.getElementById(colorPickerId);
+  colorPicker.style.visibility = "hidden";
+  body = document.getElementsByTagName("BODY")[0];
+  body.style.background = "#eeeeee";
+  setTableLight();
+}
+
 function handleColorInputClick() {
   buttonNum = buttonNumber(this.id);
   selectedEventKey = groupedEvents[this.value];
@@ -34,9 +42,7 @@ function handleColorInputClick() {
   tr = document.getElementById("tr-" + buttonNum);
   td = document.getElementById("td-" + buttonNum);
   if (colorPickerShowing) {
-    colorPicker.style.visibility = "hidden";
-    body.style.background = "#eeeeee";
-    setTableLight();
+    hideColorPicker();
   } else {
     colorPicker.style.visibility = "visible";
     body.style.background = "#7b7d79";
@@ -60,7 +66,7 @@ function handleColorSelectionClick() {
   xhr.onreadystatechange = function () {
     if (xhr.readyState == XMLHttpRequest.DONE) {
       closeModal();
-      console.log("close");
+      hideColorPicker();
     }
   }
   xhr.open("POST", updateColorUrl, true);
