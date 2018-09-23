@@ -3,7 +3,7 @@ colorPickerId = "color-picker";
 selectedTR = null;
 selectedTD = null;
 selectedEventKey = null;
-buttonNum = null;
+selectedRowId = null;
 
 function buttonNumber(buttonString) {
   return buttonString.replace("color-btn-", "")
@@ -34,39 +34,48 @@ function hideColorPicker() {
 }
 
 function updateColorTableButton(colorId) {
-  console.log("UPDATE COLOR")
-  buttonToUpdate = document.getElementById("color-btn-" + buttonNum);
-  console.log(buttonToUpdate);
+  buttonToUpdate = document.getElementById("color-btn-" + selectedRowId);
   buttonToUpdate.style.backgroundColor = colorMap[colorId];
-  console.log("#" + colorMap[colorId]);
 }
 
-function handleColorInputClick() {
-  buttonNum = buttonNumber(this.id);
-  selectedEventKey = groupedEvents[this.value];
-  colorPicker = document.getElementById(colorPickerId);
-  colorPickerId = "color-picker-" + buttonNum;
-  colorPicker.id = colorPickerId;
+function focusOnRow() {
   body = document.getElementsByTagName("BODY")[0];
-  tr = document.getElementById("tr-" + buttonNum);
-  td = document.getElementById("td-" + buttonNum);
-  if (colorPickerShowing) {
-    hideColorPicker();
-  } else {
-    colorPicker.style.visibility = "visible";
-    body.style.background = "#7b7d79";
-    tr.style.background = "#e9e9e9";
-    td.style.background = "#e9e9e9";
-    setTableDark(buttonNum);
-    selectedTR = tr;
-    selectedTD = td;
-  }
+  tr = document.getElementById("tr-" + selectedRowId);
+  td = document.getElementById("td-" + selectedRowId);
+  body.style.background = "#7b7d79";
+  tr.style.background = "#e9e9e9";
+  td.style.background = "#e9e9e9";
+  setTableDark(selectedRowId);
+  selectedTR = tr;
+  selectedTD = td;
+}
+
+function showColorPicker() {
+  colorPicker = document.getElementById(colorPickerId);
+  colorPickerId = "color-picker-" + selectedRowId;
+  colorPicker.id = colorPickerId;
+  colorPicker.style.visibility = "visible";
   colorPickerShowing = !colorPickerShowing;
 }
 
+function handleColorInputClick() {
+  selectedRowId = buttonNumber(this.id);
+  selectedEventKey = groupedEvents[this.value];
+  if (colorPickerShowing) {
+    hideColorPicker();
+  } else {
+    showColorPicker();
+    focusOnRow();
+  }
+}
+
+function handleResponse(colorId) {
+  closeModal();
+  hideColorPicker();
+  updateColorTableButton(colorId);
+}
+
 function handleColorSelectionClick() {
-  console.log(selectedEventKey);
-  console.log(this.id);
   var colorId = this.id;
   var eventsToUpdate = selectedEventKey;
 
@@ -74,9 +83,7 @@ function handleColorSelectionClick() {
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function () {
     if (xhr.readyState == XMLHttpRequest.DONE) {
-      closeModal();
-      hideColorPicker();
-      updateColorTableButton(colorId);
+      handleResponse(colorId);
     }
   }
   xhr.open("POST", updateColorUrl, true);
@@ -87,21 +94,25 @@ function handleColorSelectionClick() {
   }));
   openModal();
 }
+
 function openModal() {
-  // modal = document.getElementById("loadingModal");
-  // modal.modal();
   $("#loadingModal").modal();
 }
+
 function closeModal() {
   $('#loadingModal').modal('toggle');
 }
 
 function addEventListners() {
+  addEventListenerToColorInputButtons();
+  addEventListenerToColorOptions();
+}
+
+function addEventListenerToColorInputButtons() {
   colorInputButtons = document.getElementsByClassName("color-input");
   for (var i = 0; i < colorInputButtons.length; i++) {
     colorInputButtons[i].addEventListener('click', handleColorInputClick);
   }
-  addEventListenerToColorOptions();
 }
 
 function addEventListenerToColorOptions() {
@@ -110,4 +121,5 @@ function addEventListenerToColorOptions() {
     colorOptionButtons[i].addEventListener('click', handleColorSelectionClick);
   }
 }
+
 window.onload = addEventListners;
