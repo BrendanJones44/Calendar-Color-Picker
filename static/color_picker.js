@@ -31,6 +31,7 @@ function hideColorPicker() {
   body = document.getElementsByTagName("BODY")[0];
   body.style.background = "#eeeeee";
   setTableLight();
+  colorPickerShowing = false;
 }
 
 function updateColorTableButton(colorId) {
