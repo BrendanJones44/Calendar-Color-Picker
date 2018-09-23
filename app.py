@@ -92,7 +92,7 @@ def calendar_items():
     if 'location' in cal_item.keys():
       event_location = cal_item['location']
       event_name = cal_item['summary']
-      event_key = event_name + ' ' + event_location
+      event_key = event_name + ', ' + event_location
       if event_key in grouped_cal_items.keys():
         grouped_cal_items[event_key].append(cal_item)
       else:
