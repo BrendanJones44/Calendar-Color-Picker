@@ -10,9 +10,9 @@ function buttonId(buttonString) {
   return buttonString.replace("color-btn-", "")
 }
 
-function setTableDark(num){
+function setTableDark(){
   for(i=0; i < NUM_EVENTS; i++){
-    if (i !== Number(num)){
+    if (i !== Number(selectedRowId)){
       document.getElementById("tr-" + i).style.background = "#7b7d79";
       document.getElementById("td-" + i).style.background = "#7b7d79";
     }
@@ -53,7 +53,7 @@ function focusOnRow() {
   body.style.background = "#7b7d79";
   tr.style.background = "#e9e9e9";
   td.style.background = "#e9e9e9";
-  setTableDark(selectedRowId);
+  setTableDark();
 }
 
 function showColorPicker() {
