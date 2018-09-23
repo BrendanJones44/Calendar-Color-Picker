@@ -1,9 +1,11 @@
 colorPickerShowing = false;
-colorPickerId = "color-picker";
 selectedTR = null;
 selectedTD = null;
 selectedEventKey = null;
 selectedRowId = null;
+
+NUM_PX_BETWEEN_ROW = 27;
+STARTING_COLOR_PICKER_MARGIN_TOP = -25;
 
 function buttonNumber(buttonString) {
   return buttonString.replace("color-btn-", "")
@@ -26,12 +28,18 @@ function setTableLight(){
 }
 
 function hideColorPicker() {
-  colorPicker = document.getElementById(colorPickerId);
+  colorPicker = document.getElementById("color-picker");
   colorPicker.style.visibility = "hidden";
   body = document.getElementsByTagName("BODY")[0];
   body.style.background = "#eeeeee";
   setTableLight();
   colorPickerShowing = false;
+}
+
+function adjustColorPickerToRow() {
+  colorPicker = document.getElementById("color-picker");
+  marginPx = STARTING_COLOR_PICKER_MARGIN_TOP + (selectedRowId * NUM_PX_BETWEEN_ROW);
+  colorPicker.style.marginTop = marginPx + "px";
 }
 
 function updateColorTableButton(colorId) {
@@ -52,9 +60,8 @@ function focusOnRow() {
 }
 
 function showColorPicker() {
-  colorPicker = document.getElementById(colorPickerId);
-  colorPickerId = "color-picker-" + selectedRowId;
-  colorPicker.id = colorPickerId;
+  colorPicker = document.getElementById("color-picker");
+  adjustColorPickerToRow();
   colorPicker.style.visibility = "visible";
   colorPickerShowing = !colorPickerShowing;
 }
