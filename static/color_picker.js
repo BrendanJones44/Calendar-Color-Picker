@@ -12,6 +12,12 @@ function buttonId(buttonString) {
   return buttonString.replace("color-btn-", "")
 }
 
+function setModalText() {
+  var modalText = document.getElementById("updateEventText");
+  var numEvents = pageState.eventsToUpdate.length
+  modalText.textContent = "Updating " + numEvents + " events... (This may take awhile)";
+}
+
 function setTableDark(){
   for(i=0; i < NUM_EVENTS; i++){
     if (i !== Number(pageState.selectedRowId)){
@@ -96,6 +102,7 @@ function handleColorSelectionClick() {
     "newColorId": colorId,
     "events": pageState.eventsToUpdate
   }));
+  setModalText();
   openModal();
 }
 
