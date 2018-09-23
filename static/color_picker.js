@@ -2,9 +2,11 @@ NUM_PX_BETWEEN_ROW = 27;
 STARTING_COLOR_PICKER_MARGIN_TOP = -25;
 UPDATE_COLOR_ENDPOINT = "http://localhost:5000/color_selection";
 
-colorPickerShowing = false;
-eventsToUpdate = null;
-selectedRowId = null;
+pageState = {
+  "colorPickerShowing": false,
+  "eventsToUpdate": null,
+  "selectedRowId": null,
+};
 
 function buttonId(buttonString) {
   return buttonString.replace("color-btn-", "")
@@ -12,7 +14,7 @@ function buttonId(buttonString) {
 
 function setTableDark(){
   for(i=0; i < NUM_EVENTS; i++){
-    if (i !== Number(selectedRowId)){
+    if (i !== Number(pageState.selectedRowId)){
       document.getElementById("tr-" + i).style.background = "#7b7d79";
       document.getElementById("td-" + i).style.background = "#7b7d79";
     }
@@ -32,24 +34,24 @@ function hideColorPicker() {
   body = document.getElementsByTagName("BODY")[0];
   body.style.background = "#eeeeee";
   setTableLight();
-  colorPickerShowing = false;
+  pageState.colorPickerShowing = false;
 }
 
 function adjustColorPickerToRow() {
   colorPicker = document.getElementById("color-picker");
-  marginPx = STARTING_COLOR_PICKER_MARGIN_TOP + (selectedRowId * NUM_PX_BETWEEN_ROW);
+  marginPx = STARTING_COLOR_PICKER_MARGIN_TOP + (pageState.selectedRowId * NUM_PX_BETWEEN_ROW);
   colorPicker.style.marginTop = marginPx + "px";
 }
 
 function updateColorTableButton(colorId) {
-  buttonToUpdate = document.getElementById("color-btn-" + selectedRowId);
+  buttonToUpdate = document.getElementById("color-btn-" + pageState.selectedRowId);
   buttonToUpdate.style.backgroundColor = colorMap[colorId];
 }
 
 function focusOnRow() {
   body = document.getElementsByTagName("BODY")[0];
-  tr = document.getElementById("tr-" + selectedRowId);
-  td = document.getElementById("td-" + selectedRowId);
+  tr = document.getElementById("tr-" + pageState.selectedRowId);
+  td = document.getElementById("td-" + pageState.selectedRowId);
   body.style.background = "#7b7d79";
   tr.style.background = "#e9e9e9";
   td.style.background = "#e9e9e9";
@@ -60,13 +62,13 @@ function showColorPicker() {
   colorPicker = document.getElementById("color-picker");
   adjustColorPickerToRow();
   colorPicker.style.visibility = "visible";
-  colorPickerShowing = !colorPickerShowing;
+  pageState.colorPickerShowing = true;
 }
 
 function handleColorInputClick() {
-  selectedRowId = buttonId(this.id);
-  eventsToUpdate = groupedEvents[this.value];
-  if (colorPickerShowing) {
+  pageState.selectedRowId = buttonId(this.id);
+  pageState.eventsToUpdate = groupedEvents[this.value];
+  if (pageState.colorPickerShowing) {
     hideColorPicker();
   } else {
     showColorPicker();
@@ -92,7 +94,7 @@ function handleColorSelectionClick() {
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.send(JSON.stringify({
     "newColorId": colorId,
-    "events": eventsToUpdate
+    "events": pageState.eventsToUpdate
   }));
   openModal();
 }
