@@ -1,7 +1,6 @@
 NUM_PX_BETWEEN_ROW = 27;
 STARTING_COLOR_PICKER_MARGIN_TOP = -25;
 UPDATE_COLOR_ENDPOINT = "http://localhost:5000/color_selection";
-
 colorPickerShowing = false;
 eventsToUpdate = null;
 selectedRowId = null;
