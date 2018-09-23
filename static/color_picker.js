@@ -1,13 +1,12 @@
-colorPickerShowing = false;
-selectedTR = null;
-selectedTD = null;
-selectedEventKey = null;
-selectedRowId = null;
-
 NUM_PX_BETWEEN_ROW = 27;
 STARTING_COLOR_PICKER_MARGIN_TOP = -25;
+UPDATE_COLOR_ENDPOINT = "http://localhost:5000/color_selection";
 
-function buttonNumber(buttonString) {
+colorPickerShowing = false;
+eventsToUpdate = null;
+selectedRowId = null;
+
+function buttonId(buttonString) {
   return buttonString.replace("color-btn-", "")
 }
 
@@ -55,8 +54,6 @@ function focusOnRow() {
   tr.style.background = "#e9e9e9";
   td.style.background = "#e9e9e9";
   setTableDark(selectedRowId);
-  selectedTR = tr;
-  selectedTD = td;
 }
 
 function showColorPicker() {
@@ -67,8 +64,8 @@ function showColorPicker() {
 }
 
 function handleColorInputClick() {
-  selectedRowId = buttonNumber(this.id);
-  selectedEventKey = groupedEvents[this.value];
+  selectedRowId = buttonId(this.id);
+  eventsToUpdate = groupedEvents[this.value];
   if (colorPickerShowing) {
     hideColorPicker();
   } else {
@@ -85,16 +82,13 @@ function handleResponse(colorId) {
 
 function handleColorSelectionClick() {
   var colorId = this.id;
-  var eventsToUpdate = selectedEventKey;
-
-  updateColorUrl = "http://localhost:5000/color_selection";
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function () {
     if (xhr.readyState == XMLHttpRequest.DONE) {
       handleResponse(colorId);
     }
   }
-  xhr.open("POST", updateColorUrl, true);
+  xhr.open("POST", UPDATE_COLOR_ENDPOINT, true);
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.send(JSON.stringify({
     "newColorId": colorId,
@@ -111,11 +105,6 @@ function closeModal() {
   $('#loadingModal').modal('toggle');
 }
 
-function addEventListners() {
-  addEventListenerToColorInputButtons();
-  addEventListenerToColorOptions();
-}
-
 function addEventListenerToColorInputButtons() {
   colorInputButtons = document.getElementsByClassName("color-input");
   for (var i = 0; i < colorInputButtons.length; i++) {
@@ -128,6 +117,11 @@ function addEventListenerToColorOptions() {
   for (var i = 0; i < colorOptionButtons.length; i++) {
     colorOptionButtons[i].addEventListener('click', handleColorSelectionClick);
   }
+}
+
+function addEventListners() {
+  addEventListenerToColorInputButtons();
+  addEventListenerToColorOptions();
 }
 
 window.onload = addEventListners;
