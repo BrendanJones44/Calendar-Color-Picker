@@ -5,7 +5,7 @@ import os
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
-
+import google.auth.transport.requests
 app = Flask(__name__)
 app.secret_key = "b'\xae\\[\x87\xae\x91\xc5\xcfK\x87\xdd\xf9(\x80\x1a3\xc8\xa1\xd4\x82\xbe\xbb\x17\x14'"
 
@@ -63,9 +63,6 @@ def oauth2callback():
   authorization_response = request.url
   flow.fetch_token(authorization_response=authorization_response)
 
-  # Store credentials in the session.
-  # ACTION ITEM: In a production app, you likely want to save these
-  #              credentials in a persistent database instead.
   credentials = flow.credentials
   session['credentials'] = credentials_to_dict(credentials)
 
@@ -76,27 +73,16 @@ def calendar_items():
   if 'credentials' not in session:
     return redirect('authorize')
 
-  # Load credentials from the session.
   credentials = google.oauth2.credentials.Credentials(
       **session['credentials'])
 
   cal_svc = googleapiclient.discovery.build(
       API_SERVICE_NAME, API_VERSION, credentials=credentials)
 
-  cal_items = []
-  page_token = None
-  semester_start = "2018-08-27T08:00:00-05:00"
-  semester_end =   "2018-12-18T23:00:00-05:00"
-  while True:
-    events = cal_svc.events().list(calendarId='primary',
-                                   timeMin=semester_start,
-                                   timeMax=semester_end,
-                                   pageToken=page_token).execute()
-    for event in events['items']:
-      cal_items.append(event)
-    page_token = events.get('nextPageToken')
-    if not page_token:
-      break
+  try:
+    cal_items = grab_calendar_items(cal_svc)
+  except google.auth.exceptions.RefreshError:
+    return redirect('authorize')
 
   # Save credentials back to session in case access token was refreshed.
   session['credentials'] = credentials_to_dict(credentials)
@@ -148,6 +134,23 @@ def credentials_to_dict(credentials):
           'client_id': credentials.client_id,
           'client_secret': credentials.client_secret,
           'scopes': credentials.scopes}
+
+def grab_calendar_items(cal_svc):
+  cal_items = []
+  page_token = None
+  semester_start = "2018-08-27T08:00:00-05:00"
+  semester_end =   "2018-12-18T23:00:00-05:00"
+  while True:
+    events = cal_svc.events().list(calendarId='primary',
+                                  timeMin=semester_start,
+                                  timeMax=semester_end,
+                                  pageToken=page_token).execute()
+    for event in events['items']:
+      cal_items.append(event)
+    page_token = events.get('nextPageToken')
+    if not page_token:
+      break
+  return cal_items
 
 if __name__ == '__main__':
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
