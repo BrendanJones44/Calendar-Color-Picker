@@ -3,6 +3,7 @@ colorPickerId = "color-picker";
 selectedTR = null;
 selectedTD = null;
 selectedEventKey = null;
+buttonNum = null;
 
 function buttonNumber(buttonString) {
   return buttonString.replace("color-btn-", "")
@@ -30,6 +31,14 @@ function hideColorPicker() {
   body = document.getElementsByTagName("BODY")[0];
   body.style.background = "#eeeeee";
   setTableLight();
+}
+
+function updateColorTableButton(colorId) {
+  console.log("UPDATE COLOR")
+  buttonToUpdate = document.getElementById("color-btn-" + buttonNum);
+  console.log(buttonToUpdate);
+  buttonToUpdate.style.backgroundColor = colorMap[colorId];
+  console.log("#" + colorMap[colorId]);
 }
 
 function handleColorInputClick() {
@@ -67,6 +76,7 @@ function handleColorSelectionClick() {
     if (xhr.readyState == XMLHttpRequest.DONE) {
       closeModal();
       hideColorPicker();
+      updateColorTableButton(colorId);
     }
   }
   xhr.open("POST", updateColorUrl, true);

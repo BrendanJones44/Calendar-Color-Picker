@@ -14,6 +14,7 @@
 
   <script>
     var groupedEvents = {{ grouped_events| tojson }};
+    var colorMap = {{ color_map| tojson }};
   </script>
   <script src="{{ url_for('static', filename='color_picker.js') }}"></script>
   <body>
