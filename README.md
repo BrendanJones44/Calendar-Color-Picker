@@ -17,8 +17,11 @@ That was the motivation behind this application.
 - Python >= (3.0.0)
 - Pip >= (3.0.0)
 
-## Installation
+## Installation & Setup
 ```pip install -r requirements.txt```
+
+You must provide a `client_secret.json` file at the root level of the repository.
+To generate a key: [follow this guide](https://developers.google.com/api-client-library/python/guide/aaa_client_secrets)
 
 ## Start up:
 - ```python app.py```
