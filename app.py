@@ -7,7 +7,7 @@ import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import google.auth.transport.requests
 app = Flask(__name__)
-app.secret_key = os.environ['APP_KEY']
+app.secret_key = os.urandom(16)
 
 CLIENT_SECRETS_FILE = "client_secret.json"
 SCOPES = ['https://www.googleapis.com/auth/calendar']

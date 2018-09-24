@@ -21,13 +21,6 @@ That was the motivation behind this application.
 ```pip install -r requirements.txt```
 
 ## Start up:
-- You'll need to configure a secret key so we can use Flask session
-- Simply run a Python console by doing ```python```
-- Inside the console:
-- ```import os```
-- ```os.urandom(16)```
-- Copy this value, exit the python console
-- ```export APP_KEY=<YOUR PASTED VALUE>```
 - ```python app.py```
 - navigate to localhost:5000 and authenticate with Google
 - You then can select colors to change classes
